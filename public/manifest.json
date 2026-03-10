@@ -1,0 +1,22 @@
+{
+  "name": "Scholar — Último Ciclo",
+  "short_name": "Scholar",
+  "description": "Sistema académico personal para tu último ciclo universitario.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#5b1f8a",
+  "theme_color": "#5b1f8a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Notas", "url": "/notas" },
+    { "name": "Tareas", "url": "/tareas" }
+  ]
+}
