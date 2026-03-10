@@ -8,7 +8,7 @@ import { es } from "date-fns/locale";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell,
 } from "recharts";
-import type { Cycle, CourseWithEvaluations, Task, Course } from "@/lib/db/schema";
+import type { Cycle, CourseWithEvaluations, Task, Course } from "@/lib/types";
 import {
   calculateCourseGrades,
   calculateCycleGPA,

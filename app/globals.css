@@ -1,5 +1,7 @@
 /* Fuentes cargadas via next/font en layout.tsx */
 @import "tailwindcss";
+@source "../app/**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
 
 /* ─── Paleta USS (SOLO 3 colores base) ────────── */
 /* Purple : #5B1F8A                                */

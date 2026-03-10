@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Course, Task, Cycle, CourseWithEvaluations } from "@/lib/db/schema";
+import type { Task, Cycle, CourseWithEvaluations } from "@/lib/types";
 
 interface AppState {
   // Tema

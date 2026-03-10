@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Settings, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import type { CourseWithEvaluations } from "@/lib/db/schema";
+import type { CourseWithEvaluations } from "@/lib/types";
 import {
   calculateCourseGrades,
   STATUS_LABELS,

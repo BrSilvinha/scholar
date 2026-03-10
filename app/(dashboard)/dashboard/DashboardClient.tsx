@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Settings, ChevronRight, FileText, BookMarked } from "lucide-react";
-import type { Cycle, CourseWithEvaluations, Task, Course } from "@/lib/db/schema";
+import { Settings, ChevronRight, FileText, BookMarked, Sun, Sunset, Moon } from "lucide-react";
+import type { Cycle, CourseWithEvaluations, Task, Course } from "@/lib/types";
 import { calculateCourseGrades, type EvaluationInput } from "@/lib/engine/grades";
 import { CountdownBanner } from "@/components/dashboard/CountdownBanner";
 import { CourseStatusCard } from "@/components/dashboard/CourseStatusCard";
 import { EvaluationPanel } from "@/components/grades/EvaluationPanel";
 import { WelcomeModal } from "@/components/dashboard/WelcomeModal";
+import { DailyScheduleModal } from "@/components/dashboard/DailyScheduleModal";
 import Link from "next/link";
 
 interface DashboardClientProps {
@@ -84,6 +85,8 @@ export function DashboardClient({
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? "Buenos días" : hour < 19 ? "Buenas tardes" : "Buenas noches";
+  const GreetIcon = hour < 12 ? Sun : hour < 19 ? Sunset : Moon;
+  const greetIconColor = hour < 12 ? "#f59e0b" : hour < 19 ? "#f97316" : "#818cf8";
 
   return (
     <div className="p-6 md:p-8 max-w-5xl mx-auto">
@@ -93,9 +96,12 @@ export function DashboardClient({
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <p className="text-sm mb-0.5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-sans)" }}>
-          {greeting},
-        </p>
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <GreetIcon size={14} style={{ color: greetIconColor }} strokeWidth={2} />
+          <p className="text-sm" style={{ color: "var(--text-muted)", fontFamily: "var(--font-sans)" }}>
+            {greeting},
+          </p>
+        </div>
         <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
           {firstName} 👋
         </h1>
@@ -107,6 +113,7 @@ export function DashboardClient({
           endDate={new Date(cycle.endDate)}
           approvedCourses={approvedCount}
           totalCourses={coursesState.length}
+          cycleName={cycle.name}
         />
       </div>
 
@@ -292,12 +299,15 @@ export function DashboardClient({
         )}
       </AnimatePresence>
 
-      {/* Modal de bienvenida */}
+      {/* Modal de bienvenida con tareas */}
       <WelcomeModal
         isOpen={showWelcome}
         tasks={upcomingTasks}
         onClose={() => setShowWelcome(false)}
       />
+
+      {/* Modal diario de horario */}
+      <DailyScheduleModal courses={coursesState} semester={cycle.semester} />
     </div>
   );
 }

@@ -35,14 +35,18 @@ export default function LoginPage() {
         style={{ background: "#5b1f8a" }}
       >
         {/* Círculos decorativos USS */}
-        <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full opacity-10"
-          style={{ border: "2px solid #a8d400" }} />
-        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full opacity-15"
-          style={{ border: "2px solid #a8d400" }} />
-        <div className="absolute -bottom-24 -right-16 w-80 h-80 rounded-full opacity-10"
-          style={{ border: "2px solid #a8d400" }} />
-        <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full opacity-15"
-          style={{ border: "2px solid #ffffff" }} />
+        <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full"
+          style={{ border: "3px solid #a8d400", opacity: 0.35 }} />
+        <div className="absolute -top-4 -left-4 w-44 h-44 rounded-full"
+          style={{ border: "2px solid #a8d400", opacity: 0.5 }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full"
+          style={{ border: "1px solid #a8d400", opacity: 0.12 }} />
+        <div className="absolute -bottom-24 -right-16 w-80 h-80 rounded-full"
+          style={{ border: "3px solid #a8d400", opacity: 0.35 }} />
+        <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full"
+          style={{ border: "2px solid #ffffff", opacity: 0.4 }} />
+        <div className="absolute top-20 right-8 w-16 h-16 rounded-full"
+          style={{ background: "#a8d400", opacity: 0.15 }} />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -97,7 +101,7 @@ export default function LoginPage() {
             className="text-2xl font-bold mb-1"
             style={{ fontFamily: "var(--font-display)", color: "#5b1f8a" }}
           >
-            Bienvenido, Jhamir
+            Bienvenido
           </h2>
           <p className="text-sm mb-8" style={{ color: "rgba(91,31,138,0.55)", fontFamily: "var(--font-sans)" }}>
             Ingresa para continuar tu ciclo 10.

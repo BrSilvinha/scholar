@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Settings } from "lucide-react";
-import type { CourseWithEvaluations } from "@/lib/db/schema";
+import type { CourseWithEvaluations } from "@/lib/types";
 import { calculateCourseGrades, type EvaluationInput } from "@/lib/engine/grades";
 import { CourseStatusCard } from "@/components/dashboard/CourseStatusCard";
 import { EvaluationPanel } from "@/components/grades/EvaluationPanel";

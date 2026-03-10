@@ -1,5 +1,6 @@
 /**
- * Seed script — crea el perfil de Jhamira con ciclo, cursos y horario.
+ * Seed script — crea el perfil de Jhamir con ciclo, cursos y horario.
+ * BORRA los datos existentes antes de recrear.
  * Uso: npx tsx scripts/seed.ts
  */
 
@@ -7,6 +8,7 @@ import { createClient } from "@supabase/supabase-js";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { users, cycles, courses, scheduleBlocks } from "../lib/db/schema";
+import { eq } from "drizzle-orm";
 import * as dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
@@ -20,13 +22,13 @@ const supabase = createClient(
 const client = postgres(process.env.DATABASE_URL!);
 const db = drizzle(client);
 
-// Slots: 0=08:00, 1=08:50, 2=09:40, 3=10:30, 4=11:20, 5=12:10,
-//        6=13:00, 7=13:50, 8=14:40, 9=15:30, 10=16:20, 11=17:10,
-//        12=18:00, 13=18:50, 14=19:40, 15=20:30, 16=21:20, 17=22:10
+// Slots de 50 min desde las 08:00
+// 0=08:00  1=08:50  2=09:40  3=10:30  4=11:20  5=12:10
+// 6=13:00  7=13:50  8=14:40  9=15:30  10=16:20 11=17:10
+// 12=18:00 13=18:50 14=19:40 15=20:30 16=21:20 17=22:10
 
 async function seed() {
-  // ── 1. Crear usuario en Supabase Auth ─────────────────────────────
-  console.log("🔐 Creando usuario en Supabase Auth...");
+  console.log("🔐 Verificando usuario en Supabase Auth...");
   const { data: authData, error: authError } =
     await supabase.auth.admin.createUser({
       email: "sbalderajhamira@uss.edu.pe",
@@ -57,27 +59,35 @@ async function seed() {
 async function runSeed(userId: string) {
   console.log("✅ User ID:", userId);
 
+  // ── 1. Borrar datos existentes (cascade automático) ───────────────
+  console.log("🗑️  Borrando datos anteriores...");
+  await db.delete(cycles).where(eq(cycles.userId, userId));
+  console.log("✅ Datos anteriores eliminados");
+
   // ── 2. Perfil en tabla users ───────────────────────────────────────
   await db
     .insert(users)
     .values({
       id: userId,
       email: "sbalderajhamira@uss.edu.pe",
-      fullName: "Jhamira Baldera",
+      fullName: "Jhamir Alexander Silva Baldera",
       career: "Ingeniería de Sistemas",
     })
-    .onConflictDoNothing();
-  console.log("✅ Perfil creado");
+    .onConflictDoUpdate({
+      target: users.id,
+      set: { fullName: "Jhamir Alexander Silva Baldera" },
+    });
+  console.log("✅ Perfil actualizado");
 
-  // ── 3. Ciclo 10 ───────────────────────────────────────────────────
+  // ── 3. Ciclo 10 — 2026-I ──────────────────────────────────────────
   const [cycle] = await db
     .insert(cycles)
     .values({
       userId,
-      name: "Ciclo 10 — 2025-I",
+      name: "Ciclo 10 — 2026-I",
       cycleNumber: 10,
-      semester: "2025-I",
-      endDate: new Date("2025-07-31T23:59:59Z"),
+      semester: "2026-I",
+      endDate: new Date("2026-07-31T23:59:59Z"),
       isCurrent: true,
     })
     .returning();
@@ -93,7 +103,7 @@ async function runSeed(userId: string) {
           userId,
           name: "AUDITORÍA DE TECNOLOGÍAS DE INFORMACIÓN",
           credits: 3,
-          color: "#5b21b6", // USS purple
+          color: "#5b1f8a",
           professor: "PALACIOS ORMEÑO JULIO CÉSAR",
           room: "Laboratorio cómputo 12",
         },
@@ -102,7 +112,7 @@ async function runSeed(userId: string) {
           userId,
           name: "INVESTIGACIÓN II",
           credits: 4,
-          color: "#7c3aed", // purple claro
+          color: "#7928a8",
           professor: "MEJIA CABRERA HEBER IVAN",
           room: "Clases Virtuales",
         },
@@ -111,16 +121,16 @@ async function runSeed(userId: string) {
           userId,
           name: "PRÁCTICAS PRE PROFESIONALES",
           credits: 1,
-          color: "#4f46e5", // índigo
+          color: "#3d1560",
           professor: "OLANO PAZ CARLOS OMAR",
           room: "Laboratorio cómputo 04",
         },
         {
           cycleId: cycle.id,
           userId,
-          name: "TÓPICOS AVANZADOS EN INGENIERÍA DE SISTEMAS",
+          name: "TÓPICOS AVANZADOS EN ING. DE SISTEMAS",
           credits: 4,
-          color: "#84cc16", // lime USS
+          color: "#a8d400",
           professor: "CALDAS NUÑEZ JESUS MANUEL",
           room: "Clases Virtuales",
         },
@@ -129,7 +139,7 @@ async function runSeed(userId: string) {
           userId,
           name: "TRABAJO DE INVESTIGACIÓN",
           credits: 1,
-          color: "#9333ea", // violeta
+          color: "#6d259a",
           professor: "MEJIA CABRERA HEBER IVAN",
           room: "Clases Virtuales",
         },
@@ -139,31 +149,23 @@ async function runSeed(userId: string) {
 
   // ── 5. Bloques de horario ─────────────────────────────────────────
   await db.insert(scheduleBlocks).values([
-    // AUDITORÍA — Miércoles 08:00–09:40 (slots 0–1)
-    { courseId: auditoria.id, userId, dayOfWeek: "miercoles", startSlot: 0, endSlot: 1, room: "Laboratorio cómputo 12" },
-    // AUDITORÍA — Miércoles 09:40–11:20 (slots 2–3)
-    { courseId: auditoria.id, userId, dayOfWeek: "miercoles", startSlot: 2, endSlot: 3, room: "Laboratorio cómputo 12" },
-
-    // INVESTIGACIÓN II — Miércoles 14:40–16:20 (slots 8–9)
-    { courseId: investigacionII.id, userId, dayOfWeek: "miercoles", startSlot: 8, endSlot: 9, room: "Clases Virtuales" },
-    // INVESTIGACIÓN II — Miércoles 16:20–19:40 (slots 10–13)
+    // AUDITORÍA — Miércoles 08:00–09:40
+    { courseId: auditoria.id, userId, dayOfWeek: "miercoles", startSlot: 0, endSlot: 2, room: "Laboratorio cómputo 12" },
+    // INVESTIGACIÓN II — Miércoles 14:40–16:20 y 16:20–19:40
+    { courseId: investigacionII.id, userId, dayOfWeek: "miercoles", startSlot: 8, endSlot: 10, room: "Clases Virtuales" },
     { courseId: investigacionII.id, userId, dayOfWeek: "miercoles", startSlot: 10, endSlot: 13, room: "Clases Virtuales" },
-
-    // PRÁCTICAS — Martes 17:10–20:30 (slots 11–14)
-    { courseId: practicas.id, userId, dayOfWeek: "martes", startSlot: 11, endSlot: 14, room: "Laboratorio cómputo 04" },
-    // PRÁCTICAS — Martes 20:30–22:10 (slots 15–16)
-    { courseId: practicas.id, userId, dayOfWeek: "martes", startSlot: 15, endSlot: 16, room: "Laboratorio cómputo 04" },
-
-    // TÓPICOS — Sábado 08:00–11:20 (slots 0–3)
-    { courseId: topicos.id, userId, dayOfWeek: "sabado", startSlot: 0, endSlot: 3, room: "Clases Virtuales" },
-
-    // TRABAJO DE INVESTIGACIÓN — Miércoles 13:00–14:40 (slots 6–7)
-    { courseId: trabajoInv.id, userId, dayOfWeek: "miercoles", startSlot: 6, endSlot: 7, room: "Clases Virtuales" },
+    // PRÁCTICAS — Martes 17:10–20:30 y 20:30–22:10
+    { courseId: practicas.id, userId, dayOfWeek: "martes", startSlot: 11, endSlot: 15, room: "Laboratorio cómputo 04" },
+    { courseId: practicas.id, userId, dayOfWeek: "martes", startSlot: 15, endSlot: 17, room: "Laboratorio cómputo 04" },
+    // TÓPICOS — Sábado 08:00–11:20
+    { courseId: topicos.id, userId, dayOfWeek: "sabado", startSlot: 0, endSlot: 4, room: "Clases Virtuales" },
+    // TRABAJO INV. — Miércoles 13:00–14:40
+    { courseId: trabajoInv.id, userId, dayOfWeek: "miercoles", startSlot: 6, endSlot: 8, room: "Clases Virtuales" },
   ]);
   console.log("✅ Horario creado");
 
   await client.end();
-  console.log("\n🎉 Seed completado! Ya puedes iniciar sesión con:");
+  console.log("\n🎉 Seed completado!");
   console.log("   Email:    sbalderajhamira@uss.edu.pe");
   console.log("   Password: 71749437Js");
 }

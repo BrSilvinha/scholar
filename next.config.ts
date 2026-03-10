@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["drizzle-orm"],
+  serverExternalPackages: ["drizzle-orm", "postgres", "web-push"],
   devIndicators: false,
   images: {
     remotePatterns: [

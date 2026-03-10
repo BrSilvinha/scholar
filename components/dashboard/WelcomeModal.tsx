@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, FlaskConical, BookOpen, Package } from "lucide-react";
 import { differenceInDays, isToday, isTomorrow, format } from "date-fns";
 import { es } from "date-fns/locale";
-import type { Task, Course } from "@/lib/db/schema";
+import type { Task, Course } from "@/lib/types";
 
 type TaskWithCourse = Task & { course: Course | null };
 

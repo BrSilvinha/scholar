@@ -122,6 +122,7 @@ export const scheduleBlocks = pgTable(
     startSlot: integer("start_slot").notNull(), // 0–17
     endSlot: integer("end_slot").notNull(),     // 0–17, must be > startSlot
     room: text("room"),
+    section: text("section"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
       .notNull(),

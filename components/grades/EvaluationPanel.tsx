@@ -11,7 +11,7 @@ import {
   GripVertical,
   Pencil,
 } from "lucide-react";
-import type { EvaluationWithGrade } from "@/lib/db/schema";
+import type { EvaluationWithGrade } from "@/lib/types";
 import { validateWeights } from "@/lib/engine/grades";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────

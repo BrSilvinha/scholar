@@ -28,7 +28,7 @@ import {
   subMonths,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import type { Task, Course } from "@/lib/db/schema";
+import type { Task, Course } from "@/lib/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type TaskWithCourse = Task & { course: Course | null };

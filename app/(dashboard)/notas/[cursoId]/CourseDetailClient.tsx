@@ -20,7 +20,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import type { CourseWithEvaluations, EvaluationWithGrade } from "@/lib/db/schema";
+import type { CourseWithEvaluations, EvaluationWithGrade } from "@/lib/types";
 import {
   calculateCourseGrades,
   STATUS_LABELS,

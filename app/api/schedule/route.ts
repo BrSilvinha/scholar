@@ -11,6 +11,7 @@ const BlockSchema = z.object({
   startSlot: z.number().int().min(0).max(17),
   endSlot: z.number().int().min(0).max(17),
   room: z.string().optional().nullable(),
+  section: z.string().optional().nullable(),
 });
 
 async function getUser() {

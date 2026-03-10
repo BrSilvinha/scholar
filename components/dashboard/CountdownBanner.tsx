@@ -10,11 +10,12 @@ interface CountdownBannerProps {
   endDate: Date;
   approvedCourses: number;
   totalCourses: number;
+  cycleName?: string;
 }
 
 type CountdownState = "normal" | "lastMonth" | "finalStretch" | "today";
 
-export function CountdownBanner({ endDate, approvedCourses, totalCourses }: CountdownBannerProps) {
+export function CountdownBanner({ endDate, approvedCourses, totalCourses, cycleName }: CountdownBannerProps) {
   const [daysLeft, setDaysLeft]   = useState(0);
   const [state, setState]         = useState<CountdownState>("normal");
 
@@ -37,7 +38,7 @@ export function CountdownBanner({ endDate, approvedCourses, totalCourses }: Coun
   const stateConfig = {
     normal: {
       icon: GraduationCap,
-      tag: "Ciclo 10 — 2025-I",
+      tag: cycleName ?? "Ciclo actual",
       label: `${daysLeft} días para terminar`,
       gradient: "linear-gradient(135deg, #5b1f8a 0%, #8b44c8 100%)",
       accentColor: "#a8d400",
@@ -114,7 +115,7 @@ export function CountdownBanner({ endDate, approvedCourses, totalCourses }: Coun
               {stateConfig.label}
             </motion.p>
             <p className="text-sm mt-2 opacity-70 text-white" style={{ fontFamily: "var(--font-sans)" }}>
-              {format(endDate, "d 'de' MMMM 'de' yyyy", { locale: es })}
+              {format(new Date(), "d 'de' MMMM 'de' yyyy", { locale: es })}
             </p>
           </div>
         </div>

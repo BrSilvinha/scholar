@@ -1,7 +1,7 @@
 // Scholar — Service Worker
 // Maneja push notifications y cache offline básico
 
-const CACHE_NAME = "scholar-v1";
+const CACHE_NAME = "scholar-v2";
 const STATIC_ASSETS = ["/", "/dashboard", "/notas", "/tareas", "/horario"];
 
 // ─── Install ──────────────────────────────────────────────────────────────────
@@ -24,12 +24,16 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// ─── Fetch (network-first para API, cache-first para estáticos) ───────────────
+// ─── Fetch (solo en producción, no en localhost/dev) ─────────────────────────
 self.addEventListener("fetch", (event) => {
+  // En desarrollo (localhost) no interceptar nada
+  if (self.location.hostname === "localhost") return;
+
   const url = new URL(event.request.url);
 
-  // No interceptar API calls
+  // No interceptar API calls ni navegación
   if (url.pathname.startsWith("/api/")) return;
+  if (event.request.mode === "navigate") return;
 
   event.respondWith(
     fetch(event.request)
