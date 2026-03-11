@@ -2,7 +2,9 @@ import { Resend } from "resend";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export interface TaskReminderEmailData {
   toEmail: string;
@@ -93,7 +95,7 @@ export async function sendTaskReminderEmail(data: TaskReminderEmailData) {
 </html>`;
 
   try {
-    const result = await resend.emails.send({
+    const result = await getResend().emails.send({
       from: process.env.RESEND_FROM_EMAIL!,
       to: toEmail,
       subject: `[Scholar] Recordatorio: ${taskTitle} — en ${daysLeft} día${daysLeft !== 1 ? "s" : ""}`,
